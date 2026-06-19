@@ -61,3 +61,35 @@ This tool is intended for educational, debugging, malware analysis, and code rec
 ## License
 
 MIT License
+
+Description:
+
+### Planned Improvements
+
+The current version only decodes simple string encodings. Future versions will include:
+
+* JavaScript AST parsing using Babel
+* Constant folding
+* Hexadecimal expression evaluation
+* String array recovery
+* Wrapper function removal
+* Variable renaming
+* Control flow simplification
+* Automatic beautification
+
+Example:
+
+Input:
+
+const _0x38a2db=['Total','log',': '];
+...
+
+Output:
+
+let total = 0;
+for (let i = 0; i < 10; i++) {
+total += i;
+}
+console.log("Total: " + total);
+
+The goal is to produce readable source code rather than returning the original obfuscated script.
