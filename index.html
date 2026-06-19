@@ -1,31 +1,105 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Lua Deobfuscator</title>
-    <style>
-        body { font-family: Arial; padding: 20px; }
-        .container { display: flex; gap: 20px; }
-        textarea {
-            width: 48%;
-            height: 500px;
-            font-family: monospace;
-        }
-        button {
-            margin: 20px 0;
-            padding: 10px 20px;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lua Deobfuscator</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #111;
+    color: white;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+}
+
+.container {
+    display: flex;
+    gap: 15px;
+}
+
+textarea {
+    width: 50%;
+    height: 500px;
+    background: #1e1e1e;
+    color: white;
+    border: 1px solid #444;
+    padding: 10px;
+    resize: none;
+    font-family: Consolas, monospace;
+}
+
+button {
+    display: block;
+    margin: 20px auto;
+    padding: 12px 30px;
+    font-size: 18px;
+    cursor: pointer;
+}
+</style>
 </head>
 <body>
-    <h1>Lua Deobfuscator</h1>
 
-    <div class="container">
-        <textarea id="input" placeholder="Paste obfuscated Lua"></textarea>
-        <textarea id="output" placeholder="Deobfuscated output"></textarea>
-    </div>
+<h1>Lua Deobfuscator</h1>
 
-    <button onclick="deobfuscate()">Deobfuscate</button>
+<div class="container">
+    <textarea id="input" placeholder="Paste obfuscated Lua here..."></textarea>
+    <textarea id="output" placeholder="Deobfuscated output..." readonly></textarea>
+</div>
 
-    <script src="deobfuscator.js"></script>
+<button onclick="deobfuscate()">Deobfuscate</button>
+
+<script>
+function decodeStringChar(code) {
+    return code.replace(
+        /string\\.char\\(([^)]+)\\)/g,
+        (_, nums) => {
+            try {
+                return nums
+                    .split(",")
+                    .map(n => String.fromCharCode(Number(n.trim())))
+                    .join("");
+            } catch {
+                return _;
+            }
+        }
+    );
+}
+
+function decodeOctal(code) {
+    return code.replace(
+        /\\\\([0-9]{1,3})/g,
+        (_, num) => String.fromCharCode(parseInt(num, 10))
+    );
+}
+
+function decodeHex(code) {
+    return code.replace(
+        /\\\\x([0-9a-fA-F]{2})/g,
+        (_, hex) => String.fromCharCode(parseInt(hex, 16))
+    );
+}
+
+function removeComments(code) {
+    return code.replace(/--\\[\\[[\\s\\S]*?\\]\\]/g, "");
+}
+
+function deobfuscate() {
+    let code = document.getElementById("input").value;
+
+    code = removeComments(code);
+    code = decodeStringChar(code);
+    code = decodeOctal(code);
+    code = decodeHex(code);
+
+    document.getElementById("output").value = code;
+}
+</script>
+
 </body>
 </html>
