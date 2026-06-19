@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lua Deobfuscator</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        .container { display: flex; gap: 20px; }
+        textarea {
+            width: 48%;
+            height: 500px;
+            font-family: monospace;
+        }
+        button {
+            margin: 20px 0;
+            padding: 10px 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Lua Deobfuscator</h1>
+
+    <div class="container">
+        <textarea id="input" placeholder="Paste obfuscated Lua"></textarea>
+        <textarea id="output" placeholder="Deobfuscated output"></textarea>
+    </div>
+
+    <button onclick="deobfuscate()">Deobfuscate</button>
+
+    <script src="deobfuscator.js"></script>
+</body>
+</html>
